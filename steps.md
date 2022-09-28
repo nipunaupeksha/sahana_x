@@ -68,6 +68,7 @@ $ code .
           require('stylelint')({
               configFile: 'stylelint.config.js',
           }),
+          require('postcss-import'),
           require('postcss-extend'),
           require('precss'),
           require('postcss-preset-env'),
@@ -101,62 +102,67 @@ $ code .
 
 - Add configs to _stylelint.config.js_ file by creating it in the root.
 
-  ```
-  module.exports = {
-      extends: [
-          'stylelint-config-recommended',
-          'stylelint-config-standard',
-          'stylelint-config-recess-order',
-          'stylelint-config-css-modules',
-          'stylelint-config-prettier'
-      ],
-      plugins: ['stylelint-scss'],
-      ignoreFiles: ['./coverage/**/*.css', './dist/**/*.css'],
-      rules: {
-          'at-rule-no-unknown': [
-              true,
-              {
-                  ignoreAtRules:[
-                      // ----
-                      // Tailwind
-                      // ----
-                      'tailwind',
-                      'apply',
-                      'variants',
-                      'responsive',
-                      'screen'
-                  ]
-              }
-          ],
-          'declaration-block-no-duplicate-custom-properties': null,
-          'named-grid-areas-no-invalid': null,
-          'no-duplicate-selectors': null,
-          'no-empty-source': null,
-          'selector-pseudo-element-no-unknown': null,
-          'declaration-block-trailing-semicolon': null,
-          'no-descending-specificity': null,
-          'string-no-newline': null,
-          // Use camelCase for classes and ids only. Works better with CSS modules.
-          // 'selector-class-pattern': /^[a-z][a-zA-Z]*(-(enter|leave)(-(active|to))?)?$/,
-          // 'selector-id-pattern': /^[a-z][a-zA-Z]*$/,
-          // Limit the number of universal characters in a selector to avoid very slow selectors
-          'selector-max-universal': 1,
-          // ----
-          // SCSS rules
-          // ----
-          'scss/dollar-variable-colon-space-before': 'never',
-          'scss/dollar-variable-colon-space-after': 'always',
-          'scss/dollar-variable-no-missing-interpolation': true,
-          'scss/dollar-variable-pattern': /^[a-z]+$/,
-          'scss/double-slash-comment-whitespace-inside':'always',
-          'scss/operator-no-newline-before': true,
-          'scss/operator-no-unspaced': ture,
-          'scss/selector-no-redundant-nesting-selector': true,
-          // Allow SCSS and CSS module keywords beginning with '@'
-          'scss/at-rule-no-unknown': null
-      },
-  }
-  ```
+    ```
+    module.exports = {
+    extends: [
+        'stylelint-config-recommended',
+        'stylelint-config-standard',
+        'stylelint-config-recess-order',
+        'stylelint-config-css-modules',
+        'stylelint-config-prettier',
+    ],
+    plugins: ['stylelint-scss'],
+    ignoreFiles: [
+        './coverage/**/*.css',
+        './dist/**/*.css',
+        './node_modules/**/*.css',
+    ],
+    rules: {
+        'at-rule-no-unknown': [
+        true,
+        {
+            ignoreAtRules: [
+            // --------
+            // Tailwind
+            // --------
+            'tailwind',
+            'apply',
+            'variants',
+            'responsive',
+            'screen',
+            ],
+        },
+        ],
+        'declaration-block-no-duplicate-custom-properties': null,
+        'named-grid-areas-no-invalid': null,
+        'no-duplicate-selectors': null,
+        'no-empty-source': null,
+        'selector-pseudo-element-no-unknown': null,
+        'declaration-block-trailing-semicolon': null,
+        'no-descending-specificity': null,
+        'string-no-newline': null,
+        // Use camelCase for classes and ids only. Works better with CSS modules
+        // 'selector-class-pattern': /^[a-z][a-zA-Z]*(-(enter|leave)(-(active|to))?)?$/,
+        // 'selector-id-pattern': /^[a-z][a-zA-Z]*$/,
+        // Limit the number of universal selectors in a selector,
+        // to avoid very slow selectors
+        'selector-max-universal': 1,
+        // --------
+        // SCSS rules
+        // --------
+        'scss/dollar-variable-colon-space-before': 'never',
+        'scss/dollar-variable-colon-space-after': 'always',
+        'scss/dollar-variable-no-missing-interpolation': true,
+        'scss/dollar-variable-pattern': /^[a-z-]+$/,
+        'scss/double-slash-comment-whitespace-inside': 'always',
+        'scss/operator-no-newline-before': true,
+        'scss/operator-no-unspaced': true,
+        'scss/selector-no-redundant-nesting-selector': true,
+        // Allow SCSS and CSS module keywords beginning with `@`
+        'scss/at-rule-no-unknown': null,
+    },
+    }
+    ```
 
 - Update VS Code settings(_./vscode/settings.json_).
 
@@ -201,21 +207,24 @@ $ code .
   $ npx tailwindcss init -p
   ```
 
-- Update _tailwind.config.file_
+- Update _tailwind.config.js_ file
 
     ```
     const colors = require('tailwindcss/colors')
 
     module.exports = {
-    purge: ['./index.html', './src/**/*.{js, ts, jsx, tsx}'],
+    purge: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
     mode: 'jit',
-    darkMode: 'class', // or 'media' or 'class'
+    darkMode: false, // or 'media' or 'class'
     theme: {
         extend: {
-        extend: {},
+        fontFamily: {
+            heading: ['Montserrat', 'sans-serif'],
+            content: ['Poppins', 'sans-serif'],
+        },
+        },
         colors: {
-            ... colors,
-        }
+        ...colors,
         },
     },
     variants: {
@@ -224,6 +233,8 @@ $ code .
     plugins: [require('@tailwindcss/forms')],
     }
     ```
+
+- Add following to *public/index.html* file.
 
 - Update the `src/index.css` file.
     
@@ -241,7 +252,7 @@ $ code .
     module.exports = {
         endOfLine: "lf",
         jsxBracketSameLine: false,
-        jsxSingleQuote: true,
+        jsxSingleQuote: false,
         printWidth: 80,
         proseWrap: "never",
         quoteProps: "as-needed",
@@ -370,7 +381,12 @@ $ code .
     ```
 
 - Run Cypress and you will find few folders are getting generated (`yarn cypress:open`).
-- 
+- Run the followinf to install Jest & Testing
+    ```
+    $ npm install @testing-library/react @testing-library/jest-dom @testing-library/react-hooks --save-dev
+
+    $ yarn add @testing-library/react @testing-library/jest-dom @testing-library/react-hooks --dev
+    ```
 
 **Formatting code automatically on commit**
 
@@ -395,6 +411,16 @@ $ code .
         "*.{css,scss}": "stylelint",
         "**/*.{js,jsx,ts,tsx,json,css,scss,md}": "prettier -w -u"
     },
+    ```
+
+**Add React Icons**
+
+- Add dependency
+
+    ```
+    $ npm install react-icons --save
+
+    $ yarn add react-icons
     ```
 
     ### 4. VS Code Extensions

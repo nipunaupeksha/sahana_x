@@ -3,7 +3,7 @@ const cracoAlias = require('craco-alias')
 
 module.exports = {
     style: {
-        postcssOptions: postcssConfig,
+        postcss: postcssConfig,
     },
     plugins: [
         {
