@@ -4,7 +4,7 @@ import Landing from './components/pages/landing-page/landing.component'
 
 const App = () => {
   return (
-    <Landing />
+    <Landing/>
   )
 }
 
