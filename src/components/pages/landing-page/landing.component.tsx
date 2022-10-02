@@ -1,8 +1,14 @@
-import React from 'react'
-import landingImage from '@/assets/images/landing_page.png'
 import HeroNavBar from '@/components/common/hero-navbar/hero-navbar.component'
+import heroMasonaryA from '@/assets/images/hero-masonary-1.png'
+import heroMasonaryB from '@/assets/images/hero-masonary-2.png'
+import heroMasonaryC from '@/assets/images/hero-masonary-4.png'
+import heroMasonaryD from '@/assets/images/hero-masonary-3.png'
+import React from 'react'
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
+import { RiRestaurantLine } from 'react-icons/ri'
 
 const Landing = () => {
+  const masonary = [heroMasonaryA, heroMasonaryB, heroMasonaryC, heroMasonaryD]
   return (
     // <div className="max-w-[960px] w-full mx-2 grid gap-[1.5rem] content-center drop-shadow-lg sm:grid-cols-2 sm:items-center sm:h-[640px] sm:justify-items-center lg:mx-auto">
     //   <div>
@@ -25,8 +31,35 @@ const Landing = () => {
     //     src={landingImage}
     //   />
     // </div>
-    <div className='flex'>
-      <HeroNavBar/>
+    <div className="flex">
+      <HeroNavBar />
+      <div className="h-screen flex-1 p-7">
+        <div className="grid grid-cols-2 gap-4">
+          <ResponsiveMasonry
+            columnsCountBreakPoints={{ 350: 1, 750: 2 }}
+            className="md:mt-[3rem]"
+          >
+            <Masonry>
+              {masonary.map((image, i) => (
+                <img
+                  key={i}
+                  src={image}
+                  className="px-2 py-2 border-2 border-coolGray-500 m-1 hover:scale-95 hover:duration-300 hover:ease-in-out"
+                />
+              ))}
+            </Masonry>
+          </ResponsiveMasonry>
+
+          <div>
+            <h1 className="text-2xl font-semibold font-content text-gray-600 text-center">
+              Sandevistan
+            </h1>
+            <span className="flex justify-center">
+              <RiRestaurantLine className="text-xl text-gray-500 mb-2 w-full border-b-2 border-coolGray-500" />
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
