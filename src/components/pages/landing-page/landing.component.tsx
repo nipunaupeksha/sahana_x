@@ -5,7 +5,7 @@ import heroMasonaryC from '@/assets/images/hero-masonary-4.png'
 import heroMasonaryD from '@/assets/images/hero-masonary-3.png'
 import React from 'react'
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
-import { RiRestaurantLine } from 'react-icons/ri'
+import { RiRestaurantLine, RiMouseLine, RiArrowDownLine } from 'react-icons/ri'
 
 const Landing = () => {
   const masonary = [heroMasonaryA, heroMasonaryB, heroMasonaryC, heroMasonaryD]
@@ -50,13 +50,23 @@ const Landing = () => {
             </Masonry>
           </ResponsiveMasonry>
 
-          <div>
+          <div className="md:mt-[3rem]">
             <h1 className="text-2xl font-semibold font-content text-gray-600 text-center">
               Sandevistan
             </h1>
             <span className="flex justify-center">
               <RiRestaurantLine className="text-xl text-gray-500 mb-2 w-full border-b-2 border-coolGray-500" />
             </span>
+            <p className="text-lg mt-2">
+              Sandevistan is The Expense Tracker, helping you manage your
+              expenses on-the-go, track your expenses and set aside money in
+              real-time. Open yours in minutes right from your smartphone, and
+              track expenses within minutes.
+            </p>
+            <div className="flex justify-center flex-col items-center">
+              <RiMouseLine className="text-xl text-gray-500 mt-[4rem] border-coolGray-500 animate-bounce" />
+              <RiArrowDownLine className="text-xl mt-0 text-gray-500 mt-2 border-coolGray-500 animate-bounce" />
+            </div>
           </div>
         </div>
       </div>
